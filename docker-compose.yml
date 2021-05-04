@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  nginx:
+    image: nginx
+    container_name: osg2-nginx
+    working_dir: /var/www/html
+    ports:
+      - 9999:80
+    volumes:
+      - .:/var/www/html
+      - ./docker-config/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+
+  mongodb:
+    container_name: osg2-mongodb
+    image: mongo:4
+    ports:
+      - 27017:27017
+    volumes:
+      - ./docker-config/mongodb/data/db:/data/db
+
+  php-fpm:
+    container_name: osg2-php
+    build: ./docker-config/php
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    ports:
+      - 9998:8080
